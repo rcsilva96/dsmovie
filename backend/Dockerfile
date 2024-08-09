@@ -1,16 +1,27 @@
+# Use uma imagem base do Maven com JDK 17 para compilar a aplicação
+FROM maven:3.8.4-openjdk-17 AS build
 
-
-# Use uma imagem base do Java
-FROM openjdk:17-jdk-slim
-
-# Define o diretório de trabalho dentro do contêiner
+# Defina o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copia o arquivo JAR do projeto para o contêiner
-COPY target/*.jar app.jar
+# Copie o arquivo pom.xml e as dependências do projeto
+COPY pom.xml .
+COPY src ./src
 
-# Expõe a porta na qual a aplicação irá rodar
+# Compile o projeto e crie um jar
+RUN mvn clean package
+
+# Use uma imagem mais leve com JDK 17 para rodar a aplicação
+FROM openjdk:17-jdk-slim
+
+# Defina o diretório de trabalho dentro do contêiner
+WORKDIR /app
+
+# Copie o jar do estágio de construção anterior
+COPY --from=build /app/target/dsmovie-0.0.1-SNAPSHOT.jar /app/dsmovie.jar
+
+# Exponha a porta que a aplicação irá rodar
 EXPOSE 8080
 
-# Define o comando para executar a aplicação
-CMD ["java", "-jar", "app.jar"]
+# Comando para rodar a aplicação
+ENTRYPOINT ["java", "-jar", "dsmovie.jar"]
