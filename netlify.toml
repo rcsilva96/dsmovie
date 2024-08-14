@@ -1,7 +1,7 @@
 [build]
-  base = "frontend" # Define a pasta base onde o build será executado
-  command = "npm run build" # Comando para rodar o build
-  publish = "frontend/build" # Pasta onde o Netlify vai encontrar os arquivos para publicar
+  base = "frontend" #
+  command = "npm run build" 
+  publish = "frontend/build" 
 
 [context.production.environment]
   REACT_APP_BACKEND_URL = "https://dsmovie1-zl9phgxc.b4a.run/"
