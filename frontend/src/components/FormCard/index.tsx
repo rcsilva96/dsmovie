@@ -10,17 +10,13 @@ type Props = {
 };
 
 function FormCard({ movieId }: Props) {
+  const [movie, setMovie] = useState<Movie>();
 
-    const [movie, setMovie] = useState<Movie>();
-
-    useEffect(() => {
-
-        axios.get(`${BASE_URL}/movies/${movieId}`)
-            .then(response => {
-                setMovie(response.data);
-            })
-
-    }, [movieId]);
+  useEffect(() => {
+    axios.get(`${BASE_URL}/movies/${movieId}`).then((response) => {
+      setMovie(response.data);
+    });
+  }, [movieId]);
 
   return (
     <div className="dsmovie-form-container">
